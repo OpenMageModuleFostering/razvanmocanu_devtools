@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+    <name>RazvanMocanu_Devtools</name>
+    <version>0.0.1</version>
+    <stability>stable</stability>
+    <license>Open Software License (OSL)</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>Inserts block information inside the HTML source.</summary>
+    <description>This module wraps each block in comment tags and ads information about the block like name, template and data.&#xD;
+&#xD;
+This allows the developer to quickly identify blocks and find the associated templates.&#xD;
+&#xD;
+It doesn't work as the template hints. All the information is contained inside the HTLM which you can inspect with the browser.</description>
+    <notes>This extension was made for my personal use.&#xD;
+If you find it useful or think it should contain other features, feel free to contact me.</notes>
+    <authors><author><name>Razvan Mocanu</name><user>razvan_mocanu</user><email>razvan_mocanu@yahoo.com</email></author></authors>
+    <date>2014-06-17</date>
+    <time>14:07:45</time>
+    <contents><target name="magecommunity"><dir name="RazvanMocanu"><dir name="Devtools"><dir name="Helper"><file name="Data.php" hash="78ed86e7cea80cfc913e8c9a35cc9a83"/></dir><dir name="Model"><file name="Booleanselect.php" hash="8e8c9f59d97b9fe67291b93c4e59da7c"/><file name="Observer.php" hash="912dbe981db1ccc8d397715a3f2f94e1"/><file name="Tagselect.php" hash="29c03ea79a9567aedd52652c7cd499ae"/></dir><file name="RazvanMocanu_Devtools.xml" hash="ddb82da5aa2c298e79a7cfff58985999"/><dir name="etc"><file name="config.xml" hash="1f2701a40483a5456a68643fedc14af7"/><file name="system.xml" hash="05c653ed0160d9da9d2de920e6bcc748"/></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="RazvanMocanu_Devtools.xml" hash="ddb82da5aa2c298e79a7cfff58985999"/></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.2.0</min><max>5.5.0</max></php></required></dependencies>
+</package>

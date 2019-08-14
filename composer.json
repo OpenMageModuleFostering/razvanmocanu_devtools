@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/RazvanMocanu_Devtools",
+    "type": "magento-module",
+    "license": "Open-Software-License-(OSL)",
+    "homepage": "",
+    "description": "Inserts block information inside the HTML source.",
+    "authors": [
+    {
+        "name": "Razvan Mocanu",
+        "email": "razvan_mocanu@yahoo.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
