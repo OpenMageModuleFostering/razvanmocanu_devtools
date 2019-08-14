@@ -1,9 +1,9 @@
 {
     "name": "OpenMageModuleFostering/RazvanMocanu_Devtools",
     "type": "magento-module",
-    "license": "Open-Software-License-(OSL)",
+    "license": "OSL",
     "homepage": "",
-    "description": "Inserts block information inside the HTML source.",
+    "description": "See extended block information inside the HTML source.",
     "authors": [
     {
         "name": "Razvan Mocanu",
