@@ -3,7 +3,11 @@
     "type": "magento-module",
     "license": "Open-Software-License-(OSL)",
     "homepage": "",
-    "description": "This module wraps each block in comment tags and ads information about the block. The available information is: name, template and data. This allows the developer to quickly identify blocks and find the associated templates and data. It doesn't work as the template hints. All the information is contained inside the HTLM which you can inspect with the browser. If you are using Firebug, don't forget to set it to show comments. See screenshots.",
+    "description": "- This module wraps each block in comment tags containing information about the block. 
+- Shows block info in page source: block name, block template, specific CMS block data, other data
+- Shows the list of layout update handles for the current page
+
+This allows the developer to quickly identify blocks and find the associated templates and data. It doesn't work as the template hints. All the information is contained inside the HTML which you can inspect with the browser. If you are using Firebug, don't forget to set it to show comments. See screenshots.",
     "authors": [
     {
         "name": "Razvan Mocanu",
