@@ -1,27 +1,23 @@
 <?xml version="1.0"?>
 <package>
     <name>RazvanMocanu_Devtools</name>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <stability>stable</stability>
-    <license>OSL</license>
+    <license>Open Software License (OSL)</license>
     <channel>community</channel>
     <extends/>
-    <summary>See extended block information inside the HTML source.</summary>
+    <summary>Inserts block information inside the HTML source.</summary>
     <description>This module wraps each block in comment tags and ads information about the block like name, template and data.&#xD;
 &#xD;
 This allows the developer to quickly identify blocks and find the associated templates.&#xD;
 &#xD;
 It doesn't work as the template hints. All the information is contained inside the HTLM which you can inspect with the browser.</description>
-    <notes>Display block data:&#xD;
-- block name&#xD;
-- block template&#xD;
-- block data&#xD;
-&#xD;
-Easy inspect block parte/children.</notes>
+    <notes>This extension was made for my personal use.&#xD;
+If you find it useful or think it should contain other features, feel free to contact me.</notes>
     <authors><author><name>Razvan Mocanu</name><user>razvan_mocanu</user><email>razvan_mocanu@yahoo.com</email></author></authors>
-    <date>2014-06-20</date>
-    <time>20:39:30</time>
-    <contents><target name="mageetc"><dir name="."><dir name="app"><dir name="etc"><dir name="modules"><file name="RazvanMocanu_Devtools.xml" hash=""/></dir></dir></dir></dir></target></contents>
+    <date>2014-06-30</date>
+    <time>07:57:02</time>
+    <contents><target name="magecommunity"><dir name="RazvanMocanu"><dir name="Devtools"><dir name="Helper"><file name="Data.php" hash="d845c14710df9b1b2f511fcaa58872ea"/></dir><dir name="Model"><file name="Booleanselect.php" hash="8e8c9f59d97b9fe67291b93c4e59da7c"/><file name="Observer.php" hash="6f2e2384b379e259d236fd137a3a98bc"/><file name="Tagselect.php" hash="29c03ea79a9567aedd52652c7cd499ae"/></dir><file name="changes.txt" hash="5c04bfae5f1d19eb2c71b6e66818ae9a"/><dir name="etc"><file name="config.xml" hash="1feb0feb485089d57a7d915aa4919978"/><file name="system.xml" hash="bb328fb1a9c271b64593fc2ccb8e89a9"/></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="RazvanMocanu_Devtools.xml" hash="ddb82da5aa2c298e79a7cfff58985999"/></dir></target></contents>
     <compatible/>
-    <dependencies><required><php><min>1.5.2</min><max>1.5.5</max></php></required></dependencies>
+    <dependencies><required><php><min>5.2.0</min><max>5.5.0</max></php></required></dependencies>
 </package>

@@ -1,0 +1,8 @@
+0.0.2
+
+- template includes package and theme
+- option to add the template file name as div title so it will be displayed on hover
+
+0.0.3
+
+- option to not encapsulate empty blocks
