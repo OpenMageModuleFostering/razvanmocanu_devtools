@@ -1,23 +1,18 @@
 <?xml version="1.0"?>
 <package>
     <name>RazvanMocanu_Devtools</name>
-    <version>0.0.3</version>
+    <version>0.0.5</version>
     <stability>stable</stability>
     <license>Open Software License (OSL)</license>
     <channel>community</channel>
     <extends/>
-    <summary>Inserts block information inside the HTML source.</summary>
-    <description>This module wraps each block in comment tags and ads information about the block like name, template and data.&#xD;
-&#xD;
-This allows the developer to quickly identify blocks and find the associated templates.&#xD;
-&#xD;
-It doesn't work as the template hints. All the information is contained inside the HTLM which you can inspect with the browser.</description>
-    <notes>This extension was made for my personal use.&#xD;
-If you find it useful or think it should contain other features, feel free to contact me.</notes>
+    <summary>This module wraps each block in comment tags and ads information about the block. The available information is: name, template and data. This allows the developer to quickly identify blocks and find the associated templates and data. It doesn't work as the template hints. All the information is contained inside the HTLM which you can inspect with the browser. If you are using Firebug, don't forget to set it to show comments. See screenshots.</summary>
+    <description>This module wraps each block in comment tags and ads information about the block. The available information is: name, template and data. This allows the developer to quickly identify blocks and find the associated templates and data. It doesn't work as the template hints. All the information is contained inside the HTLM which you can inspect with the browser. If you are using Firebug, don't forget to set it to show comments. See screenshots.</description>
+    <notes>Code refactoring.</notes>
     <authors><author><name>Razvan Mocanu</name><user>razvan_mocanu</user><email>razvan_mocanu@yahoo.com</email></author></authors>
-    <date>2014-06-30</date>
-    <time>07:57:02</time>
-    <contents><target name="magecommunity"><dir name="RazvanMocanu"><dir name="Devtools"><dir name="Helper"><file name="Data.php" hash="d845c14710df9b1b2f511fcaa58872ea"/></dir><dir name="Model"><file name="Booleanselect.php" hash="8e8c9f59d97b9fe67291b93c4e59da7c"/><file name="Observer.php" hash="6f2e2384b379e259d236fd137a3a98bc"/><file name="Tagselect.php" hash="29c03ea79a9567aedd52652c7cd499ae"/></dir><file name="changes.txt" hash="5c04bfae5f1d19eb2c71b6e66818ae9a"/><dir name="etc"><file name="config.xml" hash="1feb0feb485089d57a7d915aa4919978"/><file name="system.xml" hash="bb328fb1a9c271b64593fc2ccb8e89a9"/></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="RazvanMocanu_Devtools.xml" hash="ddb82da5aa2c298e79a7cfff58985999"/></dir></target></contents>
+    <date>2014-10-11</date>
+    <time>15:23:58</time>
+    <contents><target name="magecommunity"><dir name="RazvanMocanu"><dir name="Devtools"><dir name="Helper"><file name="Data.php" hash="d845c14710df9b1b2f511fcaa58872ea"/></dir><dir name="Model"><file name="Observer.php" hash="8b45c5b1f962545f4a94fd6f2e613a0e"/><file name="Tagselect.php" hash="ec541a5fcf7c158446a36331ae0f40f2"/></dir><file name="changes.txt" hash="c19a5aac95003791e4ceefaf30a009a6"/><dir name="etc"><file name="config.xml" hash="c7497202fc56f965e389b81ecb22c6d8"/><file name="system.xml" hash="cd479a31494679ded976b751d8091702"/></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="RazvanMocanu_Devtools.xml" hash="949c28e6d2e0a4416716145bb28483d1"/></dir></target></contents>
     <compatible/>
-    <dependencies><required><php><min>5.2.0</min><max>5.5.0</max></php></required></dependencies>
+    <dependencies><required><php><min>5.3.0</min><max>5.6.9</max></php></required></dependencies>
 </package>

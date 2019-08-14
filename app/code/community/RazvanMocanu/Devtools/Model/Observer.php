@@ -1,107 +1,133 @@
 <?php
-class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
-{
-    public function __construct()
-    {
+
+class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer {
+    public function __construct() {
     }
-    public function highlightBlocks($observer)
-    {
 
-        if((Mage::getDesign()->getArea() == 'frontend') && (Mage::getStoreConfig('devtools_options/block_info_settings/block_info_enabled'))) {
-
-            $argBefore = $observer->getBlock()->getYourCustomParam();
-
-            $_currentBlock = $observer->getBlock();
-            $_blockName = $_currentBlock->getNameInLayout();
-            $_blockTemplate = $_currentBlock->getTemplateFile();
-
-            if($_blockName == 'header') {
-                //var_dump($_currentBlock);
-            }
-
-            // get config for encapsulating tag
-            $_wrapperTag = Mage::getStoreConfig('devtools_options/block_info_settings/tag_select');
-            if($_wrapperTag == null) {
-                $_wrapperTag = 'comment';
-            }
-
-            if(($_blockName == 'root') || ($_blockName == 'head') || (($_currentBlock->getParentBlock() != null) && ($_currentBlock->getParentBlock()->getNameInLayout() == 'head'))) {
-                $_wrapperTag = 'comment';
-            }
-
-            // get config for show_block_name
-            $_showBlockName = Mage::getStoreConfig('devtools_options/block_info_settings/show_block_name');
-            // prepare content for block name
-            $_blockNameContent = '';
-            if($_showBlockName) {
-                $_blockNameContent = ' BlockName="'.$_blockName.'"';
-            }
-
-            // get config for show_block_template
-            $_showTemplate = Mage::getStoreConfig('devtools_options/block_info_settings/show_block_template');
-            // prepare content for block name
-            $_blockTemplateContent = '';
-            if($_showTemplate) {
-                $_blockTemplateContent = ' BlockTemplate="'.$_blockTemplate.'"';
-            }
-
-            // get config for show_block_data
-            $_showData = Mage::getStoreConfig('devtools_options/block_info_settings/show_block_data');
-            // prepare content for block data
-            $_blockDataContent = '';
-            if($_showData) {
-
-                $_currentData = '';
-
-                //get first level of data in array
-                //if the value is array it will not be parsed
-                foreach($_currentBlock->debug() as $key=>$value){
-                    if($key != "text") {
-                        if(!is_array($value)){
-                            $_currentData .= $key . ':' . $value .'; ';
-                        }
-                        else {
-                            $_currentData .= $key . ':' . 'ARRAY' .'; ';
-                        }
-                    }
-                }
-
-                $_blockDataContent = ' Data="'.$_currentData.'"';
-            }
-
-            //get config for show_on_hover
-            $_showOnHover = Mage::getStoreConfig('devtools_options/block_info_settings/show_on_hover');
-            $_blockHoverContent = '';
-            if($_showOnHover) {
-                $_blockHoverContent = ' title="'.$_blockTemplate.'" ';
-            }
-
-            $normalOutput = $observer->getTransport()->getHtml();
-
-
-            $_showEmptyBlocks = Mage::getStoreConfig('devtools_options/block_info_settings/show_empty_blocks');
-
-
-            if(!$_showEmptyBlocks && !$normalOutput) {
-
-            }
-            else {
-                if($_wrapperTag == 'comment') {
-                    $normalOutput = '<!--  Begin'.$_blockNameContent.$_blockTemplateContent.$_blockDataContent.' -->'."\n".$normalOutput."\n".'<!-- End'.$_blockNameContent.' -->';
-                }
-
-                if($_wrapperTag == 'section') {
-                    $normalOutput = '<section'.$_blockNameContent.$_blockTemplateContent.$_blockDataContent.'>'."\n".$normalOutput."\n".'</section>';
-                }
-
-                if($_wrapperTag == 'div') {
-                    $normalOutput = '<div'.$_blockHoverContent.$_blockNameContent.$_blockTemplateContent.$_blockDataContent.'>'."\n".$normalOutput."\n".'</div>';
-                }
-            }
-
-            $observer->getTransport()->setHtml( $argBefore . $normalOutput );
-
+    public function highlightBlocks($observer) {
+        if ((Mage::getDesign()->getArea() == 'frontend') && (Mage::getStoreConfig('devtools_options/block_info_settings/block_info_enabled'))) {
+            $observer->getTransport()->setHtml($this->updateContent($observer));
         }
     }
 
+    private function updateContent($observer) {
+
+        $blockDetails = $this->prepareContent($observer);
+
+        $_showEmptyBlocks = Mage::getStoreConfig('devtools_options/block_info_settings/show_empty_blocks');
+
+        if ((!$_showEmptyBlocks && !$blockDetails['blockInitialContent'])) {
+            $blockDetails['wrapperTag'] = "empty";
+        }
+
+        switch($blockDetails['wrapperTag']):
+            case 'section':
+                $newContent = $this->prepareSection($blockDetails);
+                break;
+            case 'div':
+                $newContent = $this->prepareDiv($blockDetails);
+                break;
+            case 'comment':
+                $newContent = $this->prepareComment($blockDetails);
+                break;
+            default:
+                $newContent = '';
+        endswitch;
+
+        return $newContent;
+    }
+
+    private function prepareContent($observer) {
+        $_currentBlock = $observer->getBlock();
+
+        $_blockDetails = array();
+        $_blockDetails['wrapperTag'] = $this->getWrapperTag($_currentBlock);
+        $_blockDetails['blockName'] = $this->getBlockNameContent($_currentBlock);
+        $_blockDetails['blockTemplate'] = $this->getBlockTemplateContent($_currentBlock);
+        $_blockDetails['blockData'] = $this->getBlockDataContent($_currentBlock);
+        $_blockDetails['blockHover'] = $this->getBlockHoverContent($_currentBlock);
+        $_blockDetails['blockInitialContent'] = $observer->getTransport()->getHtml();
+
+        return $_blockDetails;
+    }
+
+    private function getWrapperTag($theBlock) {
+        $_wrapperTag = Mage::getStoreConfig('devtools_options/block_info_settings/tag_select');
+        // Set wrapper tag to comment if the block is root, head or contained in head.
+        // In this cases no other tag can be used.
+        if (($theBlock == 'root') ||
+            ($theBlock == 'head') ||
+            (($theBlock->getParentBlock() != null) &&
+                ($theBlock->getParentBlock()->getNameInLayout() == 'head')
+            )
+        ) {
+            $_wrapperTag = 'comment';
+        }
+        return $_wrapperTag;
+    }
+
+    private function getBlockNameContent($theBlock) {
+        if (Mage::getStoreConfig('devtools_options/block_info_settings/show_block_name')) {
+            return ' BlockName="' . $theBlock->getNameInLayout() . '"';
+        } else {
+            return "";
+        }
+    }
+
+    private function getBlockTemplateContent($theBlock) {
+        if (Mage::getStoreConfig('devtools_options/block_info_settings/show_block_template')) {
+            return ' BlockTemplate="' . $theBlock->getTemplateFile() . '"';
+        } else {
+            return "";
+        }
+    }
+
+    private function getBlockDataContent($theBlock) {
+
+        if (Mage::getStoreConfig('devtools_options/block_info_settings/show_block_data')) {
+            return $this->prepareDataContent($theBlock);
+        } else {
+            return "";
+        }
+    }
+
+    private function prepareDataContent($theBlock) {
+
+        $_currentData = '';
+
+        //get first level of data in array
+        //if the value is array it will not be parsed
+        foreach ($theBlock->debug() as $key => $value) {
+            if ($key != "text") {
+                if (!is_array($value)) {
+                    $_currentData .= $key . ':' . $value . '; ';
+                } else {
+                    $_currentData .= $key . ':' . 'ARRAY' . '; ';
+                }
+            }
+        }
+
+        return ' Data="' . $_currentData . '"';
+    }
+
+    private function getBlockHoverContent($theBlock) {
+
+        if (Mage::getStoreConfig('devtools_options/block_info_settings/show_on_hover')) {
+            return ' title="' . $theBlock->getTemplateFile() . '" ';
+        } else {
+            return "";
+        }
+    }
+
+    private function prepareSection($blockDetails) {
+        return '<section' . $blockDetails['blockName'] . $blockDetails['blockTemplate'] . $blockDetails['blockData'] . '>' . "\n" . $blockDetails['blockInitialContent'] . "\n" . '</section>';
+    }
+
+    private function prepareDiv($blockDetails) {
+        return '<div' . $blockDetails['blockHover'] . $blockDetails['blockName'] . $blockDetails['blockTemplate'] . $blockDetails['blockData'] . '>' . "\n" . $blockDetails['blockInitialContent'] . "\n" . '</div>';
+    }
+
+    private function prepareComment($blockDetails) {
+        return '<!--  Begin' . $blockDetails['blockName'] . $blockDetails['blockTemplate'] . $blockDetails['blockData'] . ' -->' . "\n" . $blockDetails['blockInitialContent'] . "\n" . '<!-- End' . $blockDetails['blockName'] . ' -->';
+    }
 }
