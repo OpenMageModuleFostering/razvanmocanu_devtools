@@ -24,14 +24,17 @@
 class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
 {
 
-    private $_helper;
+    /**
+     * @var RazvanMocanu_Devtools_Helper_Data $helper
+     */
+    private $helper;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->_helper = Mage::helper('devtools');
+        $this->helper = Mage::helper('devtools');
     }
 
     /**
@@ -43,9 +46,9 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      */
     public function highlightBlocks($observer)
     {
-        if ((Mage::getDesign()->getArea() == 'frontend')
-            && (Mage::getStoreConfig('devtools_options/block_info_settings/block_info_enabled'))) {
-            $observer->getTransport()->setHtml($this->_updateContent($observer));
+        if ($this->helper->highlightFrontend() || $this->helper->highlightAdmin())
+        {
+            $observer->getTransport()->setHtml($this->updateContent($observer));
         }
     }
 
@@ -56,18 +59,18 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _updateContent($observer)
+    private function updateContent($observer)
     {
 
-        $blockDetails = $this->_prepareContentData($observer);
+        $blockDetails = $this->prepareContentData($observer);
 
-        $_showEmptyBlocks = Mage::getStoreConfig('devtools_options/block_info_settings/show_empty_blocks');
+        $showEmptyBlocks = Mage::getStoreConfig('devtools_options/block_info_settings/show_empty_blocks');
 
-        if ((!$_showEmptyBlocks && !$blockDetails['blockInitialContent'])) {
+        if ((!$showEmptyBlocks && !$blockDetails['blockInitialContent'])) {
             $blockDetails['wrapperTag'] = "empty";
         }
 
-        return $this->_prepareContent($blockDetails, $blockDetails['wrapperTag']);
+        return $this->prepareContent($blockDetails, $blockDetails['wrapperTag']);
     }
 
     /**
@@ -77,45 +80,22 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return array
      */
-    private function _prepareContentData($observer)
+    private function prepareContentData($observer)
     {
 
-        $_currentBlock = $observer->getBlock();
+        $currentBlock = $observer->getBlock();
 
-        $_blockDetails = array();
-        $_blockDetails['wrapperTag'] = $this->_getWrapperTag($_currentBlock)? $this->_getWrapperTag($_currentBlock) : 'empty';
-        $_blockDetails['isRoot'] = $this->_getBlockIsRoot($_currentBlock);
-        $_blockDetails['blockName'] = $this->_getBlockNameContent($_currentBlock);
-        $_blockDetails['blockTemplate'] = $this->_getBlockTemplateContent($_currentBlock);
-        $_blockDetails['CMSData'] = $this->_getBlockCMSInfoContent($_currentBlock);
-        $_blockDetails['blockData'] = $this->_getBlockDataContent($_currentBlock);
-        $_blockDetails['blockHover'] = $this->_getBlockHoverContent($_currentBlock);
-        $_blockDetails['blockInitialContent'] = $observer->getTransport()->getHtml();
+        $blockDetails = array();
+        $blockDetails['wrapperTag'] = $this->helper->getWrapperTag($currentBlock);
+        $blockDetails['isRoot'] = $this->isBlockRoot($currentBlock);
+        $blockDetails['blockName'] = $this->getBlockNameContent($currentBlock);
+        $blockDetails['blockTemplate'] = $this->getBlockTemplateContent($currentBlock);
+        $blockDetails['CMSData'] = $this->getBlockCMSInfoContent($currentBlock);
+        $blockDetails['blockData'] = $this->getBlockDataContent($currentBlock);
+        $blockDetails['blockHover'] = $this->getBlockHoverContent($currentBlock);
+        $blockDetails['blockInitialContent'] = $observer->getTransport()->getHtml();
 
-        return $_blockDetails;
-    }
-
-    /**
-     * Get the wrapper tag from config
-     *
-     * @param Mage_Core_Block_Abstract $theBlock (The actual block extends the core block)
-     *
-     * @return string
-     */
-    private function _getWrapperTag($theBlock)
-    {
-        $_wrapperTag = Mage::getStoreConfig('devtools_options/block_info_settings/tag_select');
-        // Set wrapper tag to comment if the block is root, head or contained in head.
-        // In this cases no other tag can be used.
-
-        $specialBlocks = array('root','head');
-
-        if (in_array($theBlock, $specialBlocks) ||
-            ($theBlock->getParentBlock() === null ? false : ($theBlock->getParentBlock()->getNameInLayout() == 'head'))
-        ) {
-            $_wrapperTag = 'comment';
-        }
-        return $_wrapperTag;
+        return $blockDetails;
     }
 
     /**
@@ -125,7 +105,7 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return bool
      */
-    private function _getBlockIsRoot($theBlock)
+    private function isBlockRoot($theBlock)
     {
         return ($theBlock->getNameInLayout() == 'root');
     }
@@ -135,7 +115,7 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _getLayoutHandles()
+    private function getLayoutHandles()
     {
         if (Mage::getStoreConfig('devtools_options/block_info_settings/show_layout_handles')) {
             return "<!-- \n"
@@ -154,9 +134,9 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _getBlockNameContent($theBlock)
+    private function getBlockNameContent($theBlock)
     {
-        return $this->_helper->makeAttribute(
+        return $this->helper->makeAttribute(
             Mage::getStoreConfig('devtools_options/block_info_settings/show_block_name'),
             'BlockName',
             $theBlock->getNameInLayout()
@@ -170,9 +150,9 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _getBlockTemplateContent($theBlock)
+    private function getBlockTemplateContent($theBlock)
     {
-        return $this->_helper->makeAttribute(
+        return $this->helper->makeAttribute(
             Mage::getStoreConfig('devtools_options/block_info_settings/show_block_template'),
             'BlockTemplate',
             $theBlock->getTemplateFile()
@@ -186,12 +166,12 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _getBlockDataContent($theBlock)
+    private function getBlockDataContent($theBlock)
     {
-        return $this->_helper->makeAttribute(
+        return $this->helper->makeAttribute(
             Mage::getStoreConfig('devtools_options/block_info_settings/show_block_data'),
             'Data',
-            $this->_prepareDataContent($theBlock)
+            $this->prepareDataContent($theBlock)
         );
     }
 
@@ -202,24 +182,24 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _prepareDataContent($theBlock)
+    private function prepareDataContent($theBlock)
     {
 
-        $_currentData = '';
+        $currentData = '';
 
         //get first level of data in array
         //if the value is array it will not be parsed
         foreach ($theBlock->debug() as $key => $value) {
             if ($key != "text") {
                 if (!is_array($value)) {
-                    $_currentData .= $key . ':' . $value . '; ';
+                    $currentData .= $key . ':' . $value . '; ';
                 } else {
-                    $_currentData .= $key . ':' . 'ARRAY' . '; ';
+                    $currentData .= $key . ':' . 'ARRAY' . '; ';
                 }
             }
         }
 
-        return $_currentData;
+        return $currentData;
     }
 
     /**
@@ -229,7 +209,7 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _getBlockHoverContent($theBlock)
+    private function getBlockHoverContent($theBlock)
     {
 
         if (Mage::getStoreConfig('devtools_options/block_info_settings/show_on_hover')) {
@@ -246,25 +226,23 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _getBlockCMSInfoContent($theBlock)
+    private function getBlockCMSInfoContent($theBlock)
     {
 
-        if (Mage::getStoreConfig('devtools_options/block_info_settings/show_cms_data')
-            && in_array($theBlock->getType(), ["cms/block","cms/page"])
-        ) {
+        if ($this->helper->hasShowCMSInfo($theBlock)) {
 
             switch($theBlock->getType()){
                 case 'cms/block':
-                    $CMSInfo = $this->_getBlockCMSBlockInfo($theBlock);
+                    $cmsInfo = $this->getBlockCMSBlockInfo($theBlock);
                     break;
                 case 'cms/page':
-                    $CMSInfo = $this->_getBlockCMSPageInfo($theBlock);
+                    $cmsInfo = $this->getBlockCMSPageInfo($theBlock);
                     break;
                 default:
-                    $CMSInfo = '';
+                    $cmsInfo = '';
             }
 
-            return "\n" . 'CMSData="' . $CMSInfo . '"';
+            return "\n" . 'CMSData="' . $cmsInfo . '"';
         } else {
             return "";
         }
@@ -277,7 +255,7 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _getBlockCMSBlockInfo($theBlock)
+    private function getBlockCMSBlockInfo($theBlock)
     {
 
         return 'CMSBlockId: ' . $theBlock->getBlockId();
@@ -290,7 +268,7 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _getBlockCMSPageInfo($theBlock)
+    private function getBlockCMSPageInfo($theBlock)
     {
 
         $currentPage = $theBlock->getPage();
@@ -305,7 +283,7 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
      *
      * @return string
      */
-    private function _prepareContent($blockDetails, $contentType)
+    private function prepareContent($blockDetails, $contentType)
     {
         $content = $blockDetails['blockName']
             . $blockDetails['blockTemplate']
@@ -338,7 +316,7 @@ class RazvanMocanu_Devtools_Model_Observer extends Varien_Event_Observer
             if ($pos !== false) {
                 return substr_replace(
                     $blockDetails['blockInitialContent'],
-                    $this->_getLayoutHandles() . $begin . "\n" . '<html',
+                    $this->getLayoutHandles() . $begin . "\n" . '<html',
                     $pos,
                     5
                 ) . $end;

@@ -1,27 +1,31 @@
 <?xml version="1.0"?>
 <package>
     <name>RazvanMocanu_Devtools</name>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <stability>stable</stability>
-    <license>Open Software License (OSL)</license>
+    <license>OSL</license>
     <channel>community</channel>
     <extends/>
-    <summary>- This module wraps each block in comment tags containing information about the block. &#xD;
-- Shows block info in page source: block name, block template, specific CMS block data, other data&#xD;
+    <summary>Inserts information about blocks and page inside the HTML source.&#xD;
+Works with C.E. and E.E..</summary>
+    <description>&lt;p&gt;&#xD;
+- This module wraps each block in comment tags containing information about the block.&lt;br /&gt; &#xD;
+- Shows block info in page source: block name, block template file, specific CMS block data, other data&lt;br /&gt;&#xD;
 - Shows the list of layout update handles for the current page&#xD;
-&#xD;
-This allows the developer to quickly identify blocks and find the associated templates and data. It doesn't work as the template hints. All the information is contained inside the HTML which you can inspect with the browser. If you are using Firebug, don't forget to set it to show comments. See screenshots.</summary>
-    <description>- This module wraps each block in comment tags containing information about the block. &#xD;
-- Shows block info in page source: block name, block template, specific CMS block data, other data&#xD;
-- Shows the list of layout update handles for the current page&#xD;
-&#xD;
-This allows the developer to quickly identify blocks and find the associated templates and data. It doesn't work as the template hints. All the information is contained inside the HTML which you can inspect with the browser. If you are using Firebug, don't forget to set it to show comments. See screenshots.</description>
-    <notes>New functionality.&#xD;
-Code refactored.</notes>
+&lt;/p&gt;&#xD;
+&lt;p&gt;&#xD;
+This allows the developer to quickly identify blocks and find the associated templates and data. It doesn&amp;apos;t work as the template hints. All the information is contained inside the HTML which you can inspect with the browser. If you are using Firebug, don't forget to set it to show comments. See screenshots.&#xD;
+&lt;/p&gt;&#xD;
+&lt;p&gt;&#xD;
+It works with C.E. and E.E.&#xD;
+&lt;/p&gt;&#xD;
+&lt;p /&gt;&#xD;
+&lt;a href="http://mce.dev.thedt.com/"&gt;Demo here: http://mce.dev.thedt.com/&lt;/a&gt; (see page source).</description>
+    <notes>Cleaning code.</notes>
     <authors><author><name>Razvan Mocanu</name><user>razvan_mocanu</user><email>razvan_mocanu@yahoo.com</email></author></authors>
-    <date>2015-03-14</date>
-    <time>07:06:52</time>
-    <contents><target name="magecommunity"><dir name="RazvanMocanu"><dir name="Devtools"><dir name="Helper"><file name="Data.php" hash="d60488db48d25d934463700665be4b12"/></dir><dir name="Model"><file name="Observer.php" hash="763d9a76d69c588759dffbd444b114b2"/><file name="Tagselect.php" hash="79c2d2ce23f05044304a9862848ab4c7"/></dir><file name="changes.txt" hash="53d80db03385c76187e6a018bce7a18e"/><dir name="etc"><file name="config.xml" hash="fbed2f82a4a5c668fd0c7a5154cd7f3b"/><file name="system.xml" hash="b74a7c9e428982171dedee2469017168"/></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="RazvanMocanu_Devtools.xml" hash="945aafcccd52bc69ee057c55b43fe1b6"/></dir></target></contents>
+    <date>2015-12-11</date>
+    <time>20:43:57</time>
+    <contents><target name="magecommunity"><dir name="RazvanMocanu"><dir name="Devtools"><dir name="Helper"><file name="Data.php" hash="8efe0f1e23bf9b499f8e11b32637679a"/></dir><dir name="Model"><file name="Observer.php" hash="1ddadf12771afffd28f1134d5e31b3c3"/><file name="Tagselect.php" hash="ddf576f5a4bbaf9d885900df961b7585"/></dir><dir name="etc"><file name="config.xml" hash="043bbe963772f23e93f85f9562ca2e56"/><file name="system.xml" hash="235ed04fa76e2655565e820485e753ca"/></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="RazvanMocanu_Devtools.xml" hash="3783857e4466d4624dd48ab676943356"/></dir></target></contents>
     <compatible/>
-    <dependencies><required><php><min>5.3.0</min><max>5.6.9</max></php></required></dependencies>
+    <dependencies><required><php><min>5.4.0</min><max>7.0.0</max></php></required></dependencies>
 </package>
