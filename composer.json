@@ -1,17 +1,5 @@
 {
-    "name": "OpenMageModuleFostering/RazvanMocanu_Devtools",
-    "type": "magento-module",
-    "license": "OSL",
-    "homepage": "",
-    "description": "Inserts information about blocks and page inside the HTML source.
-Works with C.E. and E.E..",
-    "authors": [
-    {
-        "name": "Razvan Mocanu",
-        "email": "razvan_mocanu@yahoo.com"
-    }
-],
-    "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+    "keywords": [
+        "openmage-module"
+    ]
 }
